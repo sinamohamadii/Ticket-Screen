@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ticket Chat Screen</title>
+  <link rel="stylesheet" href="./main.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./all.js"></script>
+  <script src="./tailwindconfig.js"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+
+<body class="md:overflow-y-hidden"
+  x-data="{ sidebarOpen: false, newNote: false, editedMsg: false, changeStatus: false, editMsg: false, newTicket: false, editNote: false }">
+  <nav class="w-full md:hidden h-16 bg-[#1D2D33] fixed top-0 z-[1000]">
+    <div class="w-full h-full flex flex-row-reverse justify-between items-center px-4">
+      <button class="text-white hover:text-[#81acfa]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-arrow-left"
+          viewBox="0 0 16 16">
+          <path fill-rule="evenodd"
+            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+        </svg>
+      </button>
+      <div class="flex flex-row-reverse gap-x-5 items-center">
+        <div class="h-full flex flex-col justify-center items-end">
+          <span class="text-white">عنوان تیکت</span>
+          <span class="text-gray-300 text-sm">وضعیت تیکت</span>
+        </div>
+        <span>
+          <img src="./img/person.png" width="40px" height="40px" alt="person-icon" />
+        </span>
+        <button class="text-white cursor-pointer hover:text-[#81acfa]" @click="sidebarOpen = !sidebarOpen">
+          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-list"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+  <main class="md:flex md:flex-row-reverse overflow-x-hidden md:overflow-y-hidden max-w-screen h-screen">
+    <div class="h-full md:w-[70%] mt-16 md:mt-0">
+      <div
+        class="w-full h-auto md:h-full min-h-full md:min-h-0 chat-background bg-[#E3E6F6] overflow-auto md:overflow-hidden">
+        <div class="flex flex-col gap-y-4 md:pb-10 px-4 py-4 scroller">
+          <div
+            class="admin-massage p-7 relative w-4/5 h-auto bg-white rounded-tl-lg rounded-bl-lg rounded-tr-md self-start flex flex-col">
+            <div>
+              <p class="text-xs md:text-sm text-right">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
+                استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای
+                شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع.</p>
+            </div>
+            <div class="w-full flex flex-col gap-y-1">
+              <div class="self-start">
+                <span class="text-xs md:text-sm text-gray-500">سینا محمدی</span>
+              </div>
+              <div class="self-start flex flex-row-reverse flex-wrap items-center gap-x-1">
+                <button
+                  class="flex justify-center items-center px-2 rounded-md pb-1 bg-red-500 hover:bg-red-400 text-xs md:text-sm text-white text-[10px] xs:text-xs">پاسخ
+                  به این پیام</button>
+                <button @click="editedMsg = !editedMsg">
+                  <img src="./img/eye.png" alt="eye-icon" width="20px" />
+                </button>
+                <button @click="editMsg = !editMsg">
+                  <img src="./img/edit.png" alt="" width="20px" />
+                </button>
+                <span class="text-xs md:text-sm text-gray-500">14:26</span>
+                <span class="text-xs md:text-sm text-gray-500">2022/11/2</span>
+              </div>
+            </div>
+          </div>
+          <div class="text-sm rounded-xl bg-gray-400 pb-1 w-fit px-4 bg-opacity-30 self-center">
+            7 تیر
+          </div>
+          <div
+            class="customer-massage p-7 relative w-4/5 h-auto bg-[#5A8DEE] rounded-tr-lg rounded-br-lg rounded-tl-md self-end flex flex-col">
+            <div>
+              <p class="text-xs md:text-sm text-white text-right">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت
+                چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم
+                است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع.</p>
+            </div>
+            <div class="w-full flex flex-col gap-y-1">
+              <div class="self-end">
+                <span class="text-xs md:text-sm text-gray-200">اسم</span>
+              </div>
+              <div class="self-end flex items-center flex-wrap gap-x-1">
+                <button
+                  class="flex justify-center items-center px-2 rounded-md pb-1 bg-[#394C62] hover:bg-[#475d77] text-xs md:text-sm text-white">پاسخ</button>
+                <button>
+                  <img src="./img/eye.png" alt="eye-icon" />
+                </button>
+                <button @click="editMsg = !editMsg">
+                  <img src="./img/edit.png" alt="" />
+                </button>
+                <span class="text-xs md:text-sm text-gray-200">14:26</span>
+                <span class="text-xs md:text-sm text-gray-200">2022/11/2</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="admin-massage p-7 relative w-4/5 h-auto bg-white rounded-tl-lg rounded-bl-lg rounded-tr-md self-start flex flex-col">
+            <div
+              class="w-full h-auto text-xs text-gray-500 border-r border-[#394C62] text-right pr-4 mb-2 flex flex-col gap-2">
+              <span>سینا محمحدی</span>
+              <p class="truncate">
+                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و
+                متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و
+                کاربردهای متنوع
+              </p>
+            </div>
+            <div>
+              <p class="text-xs md:text-sm text-right">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
+                استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و .</p>
+            </div>
+            <div class="w-full flex flex-col gap-y-1">
+              <div class="self-start">
+                <span class="text-xs md:text-sm text-gray-500">سینا محمدی</span>
+              </div>
+              <div class="self-start flex flex-row-reverse flex-wrap items-center gap-x-1">
+                <button
+                  class="flex justify-center items-center px-2 rounded-md pb-1 bg-[#394C62] hover:bg-[#475d77] text-xs md:text-sm text-white">پاسخ</button>
+                <button>
+                  <img src="./img/eye.png" alt="eye-icon" />
+                </button>
+                <button @click="editMsg = !editMsg">
+                  <img src="./img/edit.png" alt="" />
+                </button>
+                <span class="text-xs md:text-sm text-gray-500">14:26</span>
+                <span class="text-xs md:text-sm text-gray-500">2022/11/2</span>
+              </div>
+            </div>
+          </div>
+          <div class="text-sm rounded-xl bg-gray-400 pb-1 w-fit px-4 bg-opacity-30 self-center">
+            8 آبان
+          </div>
+          <div
+            class="customer-massage p-7 relative w-4/5 h-auto bg-[#5A8DEE] rounded-tr-lg rounded-br-lg rounded-tl-md self-end flex flex-col">
+            <div
+              class="w-full h-auto text-xs text-gray-200 border-r border-[#394C62] text-right pr-4 mb-2 flex flex-col gap-2">
+              <span>سینا محمحدی</span>
+              <p class="truncate">
+                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و
+                متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و
+                کاربردهای متنوع
+              </p>
+            </div>
+            <div>
+              <p class="text-xs md:text-sm text-white text-right">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت
+                چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم
+                است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع.</p>
+            </div>
+            <div class="w-full flex flex-col gap-y-1">
+              <div class="self-end">
+                <span class="text-xs md:text-sm text-gray-200">اسم</span>
+              </div>
+              <div class="self-end flex-wrap flex items-center gap-x-1">
+                <button
+                  class="flex justify-center items-center px-2 rounded-md pb-1 bg-[#394C62] hover:bg-[#475d77] text-xs md:text-sm text-white">پاسخ</button>
+                <button>
+                  <img src="./img/eye.png" alt="eye-icon" />
+                </button>
+                <button @click="editMsg = !editMsg">
+                  <img src="./img/edit.png" alt="" />
+                </button>
+                <span class="text-xs md:text-sm text-gray-200">14:26</span>
+                <span class="text-xs md:text-sm text-gray-200">2022/11/2</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="admin-massage p-7 relative w-4/5 h-auto bg-white rounded-tl-lg rounded-bl-lg rounded-tr-md self-start flex flex-col">
+            <div>
+              <p class="text-xs md:text-sm text-right">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
+                استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و .</p>
+            </div>
+            <div class="w-full flex flex-col gap-y-1">
+              <div class="self-start">
+                <span class="text-xs md:text-sm text-gray-500">سینا محمدی</span>
+              </div>
+              <div class="self-start flex flex-wrap flex-row-reverse items-center gap-x-1">
+                <button
+                  class="flex justify-center items-center px-2 rounded-md pb-1 bg-[#394C62] hover:bg-[#475d77] text-xs md:text-sm text-white">پاسخ</button>
+                <button>
+                  <img src="./img/eye.png" alt="eye-icon" />
+                </button>
+                <button @click="editMsg = !editMsg">
+                  <img src="./img/edit.png" alt="" />
+                </button>
+                <span class="text-xs md:text-sm text-gray-500">14:26</span>
+                <span class="text-xs md:text-sm text-gray-500">2022/11/2</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="admin-massage p-7 relative w-4/5 h-auto bg-white rounded-tl-lg rounded-bl-lg rounded-tr-md self-start flex flex-col">
+            <div>
+              <p class="text-xs md:text-sm text-right">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
+                استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و .</p>
+            </div>
+            <div class="w-full flex flex-col gap-y-1">
+              <div class="self-start">
+                <span class="text-xs md:text-sm text-gray-500">سینا محمدی</span>
+              </div>
+              <div class="self-start flex flex-wrap flex-row-reverse items-center gap-x-1">
+                <button
+                  class="flex justify-center items-center px-2 rounded-md pb-1 bg-[#394C62] hover:bg-[#475d77] text-xs md:text-sm text-white">پاسخ</button>
+                <button>
+                  <img src="./img/eye.png" alt="eye-icon" />
+                </button>
+                <button @click="editMsg = !editMsg">
+                  <img src="./img/edit.png" alt="" />
+                </button>
+                <span class="text-xs md:text-sm text-gray-500">14:26</span>
+                <span class="text-xs md:text-sm text-gray-500">2022/11/2</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="admin-massage p-7 relative w-4/5 h-auto bg-white rounded-tl-lg rounded-bl-lg rounded-tr-md self-start flex flex-col">
+            <div>
+              <p class="text-xs md:text-sm text-right">لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با
+                استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و .</p>
+            </div>
+            <div class="w-full flex flex-col gap-y-1">
+              <div class="self-start">
+                <span class="text-xs md:text-sm text-gray-500">سینا محمدی</span>
+              </div>
+              <div class="self-start flex flex-wrap flex-row-reverse items-center gap-x-1">
+                <button
+                  class="flex justify-center items-center px-2 rounded-md pb-1 bg-[#394C62] hover:bg-[#475d77] text-xs md:text-sm text-white">پاسخ</button>
+                <button>
+                  <img src="./img/eye.png" alt="eye-icon" />
+                </button>
+                <button @click="editMsg = !editMsg">
+                  <img src="./img/edit.png" alt="" />
+                </button>
+                <span class="text-xs md:text-sm text-gray-500">14:26</span>
+                <span class="text-xs md:text-sm text-gray-500">2022/11/2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="sticky md:border-gray-300 md:border-r border-gray-400 w-full bottom-0 bg-white dark:bg-gray-900 h-auto px-4 flex flex-row-reverse justify-between items-center gap-x-2 min-h-12 z-[800]">
+        <button class="w-fit -rotate-[135deg] text-gray-500 hover:text-[#5A8DEE] h-12 self-end">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-send-fill"
+            viewBox="0 0 16 16">
+            <path
+              d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z" />
+          </svg>
+        </button>
+        <div class="flex flex-row-reverse gap-x-2 items-center w-full h-fit">
+          <textarea rows="3"
+            class="resize-none text-xs md:pr-2 md:text-sm py-4 bg-transparent text-right w-full focus:border-none focus:outline-none h-12 overflow-auto max-h-24"
+            oninput="auto_height(this)" placeholder="متن پیام"></textarea>
+          <form action="">
+            <label class="cursor-pointer h-12 flex justify-center items-center self-end link-icon">
+              <input type="file" class="msg-text bg-transparent text-transparent hidden w-10" accept=".png,.pdf,.zip" />
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+                class="bi bi-link-45deg text-gray-500 hover:text-[#5A8DEE]" viewBox="0 0 16 16">
+                <path
+                  d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z" />
+                <path
+                  d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z" />
+              </svg>
+              <div
+                class="more-info hidden bg-gray-900 text-gray-50 rounded p-3 flex-col text-xs justify-center items-center z-[1200] absolute -top-14 right-3">
+                <span>فرمت فایل: PNG, PDF, ZIP</span>
+                <span>حداکتثر حجم قابل اپلود: 128MB</span>
+              </div>
+            </label>
+          </form>
+          <button class="text-gray-500 hover:text-[#5A8DEE] h-12 self-end">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-mic-fill"
+              viewBox="0 0 16 16">
+              <path d="M5 3a3 3 0 0 1 6 0v5a3 3 0 0 1-6 0V3z" />
+              <path
+                d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- admin Sidebar -->
+    <div class="md:bg-transparent md:h-full md:w-[30%] md:overflow-hidden z-[1100]">
+      <aside
+        class="h-screen md:h-full w-3/4 md:w-full max-w-[326px] md:max-w-full bg-white overflow-y-auto fixed md:static transition-all duration-700 top-0 z-[1100]"
+        :class="{'right-0' : sidebarOpen, '-right-full' : !sidebarOpen}">
+        <div class="w-full px-5 py-3 h-auto bg-[#0C2E71] flex flex-col">
+          <div class="w-full h-auto flex flex-row-reverse justify-between">
+            <button
+              class="self-start text-[#1D2D33] hover:bg-gray-200 hover:rotate-[360deg] transition-all duration-200 rounded-full justify-center items-center bg-white hidden md:flex mt-1 w-[30px] h-[30px]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+              </svg>
+            </button>
+            <button class="self-start text-white md:hidden" @click="sidebarOpen = !sidebarOpen">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
+                viewBox="0 0 16 16">
+                <path
+                  d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+              </svg>
+            </button>
+            <img src="./img/person.png" alt="person-icon" class="self-end" width="65px" height="65px" />
+          </div>
+          <div class="flex flex-row-reverse justify-between mt-1">
+            <div class="self-end">
+              <span class="text-xs md:text-sm text-white"> شناسه تیکت : 00000</span>
+            </div>
+            <div class="flex flex-col gap-1">
+              <span class="text-white text-right">عنوان تیکت</span>
+              <span class="text-gray-300 text-xs md:text-sm text-right">وضعیت تیکت</span>
+            </div>
+          </div>
+        </div>
+        <div class="w-full h-auto px-5 py-4 flex gap-2 text-[#0C2E71]">
+          <div class="mt-1">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-info-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                <path
+                  d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+              </svg>
+            </span>
+          </div>
+          <div class="flex flex-col gap-2 text-xs md:text-sm text-right">
+            <div>
+              <span>موضوع تیکت : طرح های figma</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-arrow-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+                </svg>
+              </span>
+              <span>ایجاد کننده : اسم</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-arrow-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+                </svg>
+              </span>
+              <span>مشتری: اسم</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-arrow-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+                </svg>
+              </span>
+              <span>زمان ایجاد : 12:14:15 1401/03/07</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-arrow-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+                </svg>
+              </span>
+              <span>سرویس : ندارد</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-arrow-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z" />
+                </svg>
+              </span>
+              <span>فاکتورها : ندارد</span>
+            </div>
+          </div>
+        </div>
+        <hr class="my-1" />
+        <div class="w-full h-auto px-5 py-2 flex flex-col gap-2">
+          <div class="">
+            <form action="">
+              <label for="id_label_single" class="text-xs md:text-sm text-[#0C2E71] flex flex-col gap-2">
+                <span class="text-right">دپارتمان مورد نظر خود را انتخاب کنید</span>
+                <select class="select-tag text-xs md:text-sm w-full py-1 rounded text-right">
+                  <optgroup class="">
+                    <option class="text-right">کاربردهای متنوع</option>
+                    <option class="text-right">کاربردهای متنوع</option>
+                    <option class="text-right">کاربردهای متنوع</option>
+                    <option class="text-right">کاربردهای متنوع</option>
+                    <option class="text-right">کاربردهای متنوع</option>
+                    <option class="text-right">کاربردهای متنوع</option>
+                  </optgroup>
+                </select>
+              </label>
+            </form>
+          </div>
+          <button class="w-full h-7 rounded text-white bg-[#5A8DEE] hover:bg-[#6ea1ff] text-xs md:text-sm">تغییر
+            دپارتمان</button>
+          <button
+            class="w-full h-7 rounded text-white bg-[#5A8DEE] hover:bg-[#6ea1ff] text-xs md:text-sm flex flex-row-reverse justify-center items-center"
+            @click="changeStatus = !changeStatus">
+            <span class="">تغییر وضعیت تیکت</span>
+          </button>
+          <button
+            class="w-full h-7 rounded text-white bg-[#5A8DEE] hover:bg-[#6ea1ff] text-xs md:text-sm flex flex-row-reverse justify-center items-center">
+            <div class="flex flex-row-reverse items-center h-full relative">
+              <span>پرچمدار کردن</span>
+              <span class="absolute -right-6 xs:-right-12 md:!-right-8">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-flag"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001M14 1.221c-.22.078-.48.167-.766.255-.81.252-1.872.523-2.734.523-.886 0-1.592-.286-2.203-.534l-.008-.003C7.662 1.21 7.139 1 6.5 1c-.669 0-1.606.229-2.415.478A21.294 21.294 0 0 0 3 1.845v6.433c.22-.078.48-.167.766-.255C4.576 7.77 5.638 7.5 6.5 7.5c.847 0 1.548.28 2.158.525l.028.01C9.32 8.29 9.86 8.5 10.5 8.5c.668 0 1.606-.229 2.415-.478A21.317 21.317 0 0 0 14 7.655V1.222z" />
+                </svg>
+              </span>
+            </div>
+          </button>
+        </div>
+        <hr class="my-2" />
+        <div class="w-full h-auto px-5 py-2 flex flex-col gap-2">
+          <div class="flex text-xs md:text-sm justify-between items-center">
+            <span>یادداشت ها</span>
+            <button class="px-3 py-1 bg-[#5A8DEE] hover:bg-[#6ea1ff] rounded text-white"
+              @click="newNote = !newNote">یادداشت جدید</button>
+          </div>
+          <div class="h-auto flex flex-col gap-2">
+            <div class="w-full h-auto bg-[#5A8DEE] p-3 rounded">
+              <div>
+                <p class="text-white text-right text-xs md:text-sm break-words">
+                  لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و
+                  متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و
+                  کاربردهای متنوع.
+                </p>
+              </div>
+              <div class="flex flex-row-reverse self-start text-xs md:text-sm gap-1 mt-2">
+                <button
+                  class="px-3 py-1 bg-white hover:bg-gray-100 hover:text-[#6ea1ff] rounded text-[#5A8DEE]">حذف</button>
+                <button class="px-3 py-1 bg-white hover:bg-gray-100 hover:text-[#6ea1ff] rounded text-[#5A8DEE]"
+                  @click="editNote = !editNote">ویرایش</button>
+              </div>
+            </div>
+            <div class="w-full h-auto bg-[#5A8DEE] p-3 rounded">
+              <div>
+                <p class="text-white text-right text-xs md:text-sm break-words">
+                  لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و
+                  متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و
+                  کاربردهای متنوع.
+                </p>
+              </div>
+              <div class="flex flex-row-reverse self-start text-xs md:text-sm gap-1 mt-2">
+                <button
+                  class="px-3 py-1 bg-white hover:bg-gray-100 hover:text-[#6ea1ff] rounded text-[#5A8DEE]">حذف</button>
+                <button class="px-3 py-1 bg-white hover:bg-gray-100 hover:text-[#6ea1ff] rounded text-[#5A8DEE]"
+                  @click="editNote = !editNote">ویرایش</button>
+              </div>
+            </div>
+            <div class="w-full h-auto bg-[#5A8DEE] p-3 rounded">
+              <div>
+                <p class="text-white text-right text-xs md:text-sm break-words">
+                  لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و
+                  متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و
+                  کاربردهای متنوع.
+                </p>
+              </div>
+              <div class="flex flex-row-reverse self-start text-xs md:text-sm gap-1 mt-2">
+                <button
+                  class="px-3 py-1 bg-white hover:bg-gray-100 hover:text-[#6ea1ff] rounded text-[#5A8DEE]">حذف</button>
+                <button class="px-3 py-1 bg-white hover:bg-gray-100 hover:text-[#6ea1ff] rounded text-[#5A8DEE]"
+                  @click="editNote = !editNote">ویرایش</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+    <!-- end Admin Sidebar -->
+    <!-- customer Sidebar -->
+    <!-- <div class="md:bg-transparent md:h-full md:w-[30%] md:overflow-hidden z-[1100]">
+      <aside class="h-screen md:h-full w-3/4 md:w-full max-w-[326px] md:max-w-full bg-white overflow-y-auto fixed md:static transition-all duration-700 top-0 z-[1100]" :class="{'right-0' : sidebarOpen, '-right-full' : !sidebarOpen}">
+        <div class="w-full px-5 py-3 h-auto bg-[#0C2E71] flex flex-col">
+          <div class="w-full h-auto flex flex-row-reverse justify-between">
+            <button class="self-start text-[#1D2D33] hover:bg-gray-200 hover:rotate-[360deg] transition-all duration-200 rounded-full justify-center items-center bg-white hidden md:flex mt-1 w-[30px] h-[30px]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+              </svg>
+            </button>
+            <button class="self-start text-white md:hidden" @click="sidebarOpen = !sidebarOpen">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </button>
+            <img src="./img/person.png" alt="person-icon" class="self-end" width="65px" height="65px" />
+          </div>
+          <div class="flex flex-row-reverse justify-between mt-1">
+            <div class="self-end">
+              <span class="text-xs md:text-sm text-white"> شناسه تیکت : 00000</span>
+            </div>
+            <div class="flex flex-col gap-1">
+              <span class="text-white text-right">عنوان تیکت</span>
+              <span class="text-gray-300 text-xs md:text-sm text-right">وضعیت تیکت</span>
+            </div>
+          </div>
+        </div>
+        <div class="w-full h-auto px-5 py-4 flex gap-2 text-[#0C2E71]">
+          <div class="mt-1">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+              </svg>
+            </span>
+          </div>
+          <div class="flex flex-col gap-2 text-xs md:text-sm text-right">
+            <div>
+              <span>موضوع تیکت : طرح های figma</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                </svg>
+              </span>
+              <span>ایجاد کننده : اسم</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                </svg>
+              </span>
+              <span>زمان ایجاد : 12:14:15 1401/03/07</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                </svg>
+              </span>
+              <span>سرویس : ندارد</span>
+            </div>
+          </div>
+        </div>
+        <hr class="my-1" />
+        <div class="w-full h-auto px-5 py-2 flex flex-col gap-2">
+          <button class="w-full h-7 rounded text-white bg-[#5A8DEE] hover:bg-[#6ea1ff] text-xs md:text-sm flex flex-row-reverse justify-center items-center">
+            <div class="flex flex-row-reverse relative">
+              <span class="">بستن تیکت</span>
+              <span class="absolute -right-6 xs:-right-12 md:!-right-8">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </span>
+            </div>
+          </button>
+          <button class="w-full h-7 rounded text-white bg-[#5A8DEE] hover:bg-[#6ea1ff] text-xs md:text-sm flex flex-row-reverse justify-center items-center">
+            <div class="flex flex-row-reverse items-center h-full relative">
+              <span>پرچمدار کردن</span>
+              <span class="absolute -right-6 xs:-right-12 md:!-right-8">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-flag" viewBox="0 0 16 16">
+                  <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001M14 1.221c-.22.078-.48.167-.766.255-.81.252-1.872.523-2.734.523-.886 0-1.592-.286-2.203-.534l-.008-.003C7.662 1.21 7.139 1 6.5 1c-.669 0-1.606.229-2.415.478A21.294 21.294 0 0 0 3 1.845v6.433c.22-.078.48-.167.766-.255C4.576 7.77 5.638 7.5 6.5 7.5c.847 0 1.548.28 2.158.525l.028.01C9.32 8.29 9.86 8.5 10.5 8.5c.668 0 1.606-.229 2.415-.478A21.317 21.317 0 0 0 14 7.655V1.222z"/>
+                </svg>
+              </span>
+            </div>
+          </button>
+        </div>
+        <hr class="my-1" />
+        <div class="w-full px-5 py-2 flex flex-col gap-2 text-xs md:text-sm text-right text-[#0C2E71] overflow-x-hidden">
+          <div class="flex justify-between">
+            <span>لیست تیکت های باز</span>
+            <button class="bg-[#5A8DEE] text-white px-2 py-1 rounded text-xs md:text-sm min-w-fit hover:bg-[#6ea1ff]" @click="newTicket = !newTicket">ثبت تیکت جدید</button>
+          </div>
+          <div class="h-36 ticket-list overflow-scroll overflow-x-hidden flex flex-col gap-2">
+            <a href="#" class="flex gap-4 bg-gray-100 rounded p-2 relative">
+              <span>
+                <img src="./img/person.png" alt="person-icon" />
+              </span>
+              <div class="flex flex-col gap-1">
+                <span class="text-black">عنوان تیکت</span>
+                <span class="text=gray-200">123456</span>
+              </div>
+              <div class="absolute bottom-1 left-1 bg-[#1D2D33] text-gray-50 p-1 rounded text-[10px]">پاسخ داده شده</div>
+            </a>
+            <a href="#" class="flex gap-4 bg-gray-100 rounded p-2 relative">
+              <span>
+                <img src="./img/person.png" alt="person-icon" />
+              </span>
+              <div class="flex flex-col gap-1">
+                <span class="text-black">عنوان تیکت</span>
+                <span class="text=gray-200">123456</span>
+              </div>
+              <div class="absolute bottom-1 left-1 bg-[#1D2D33] text-gray-50 p-1 rounded text-[10px]">پاسخ مشتری</div>
+            </a>
+            <a href="#" class="flex gap-4 bg-gray-100 rounded p-2 relative">
+              <span>
+                <img src="./img/person.png" alt="person-icon" />
+              </span>
+              <div class="flex flex-col gap-1">
+                <span class="text-black">عنوان تیکت</span>
+                <span class="text=gray-200">123456</span>
+              </div>
+              <div class="absolute bottom-1 left-1 bg-[#1D2D33] text-gray-50 p-1 rounded text-[10px]">پاسخ مشتری</div>
+            </a>
+          </div>
+        </div>
+      </aside>
+    </div> -->
+    <!-- end Customer Sidebar -->
+    <div class="bg-black w-screen h-screen bg-opacity-50 flex justify-center items-center fixed top-0 left-0 z-[1200]"
+      :class="{'flex' : changeStatus, 'hidden' : !changeStatus}">
+      <div class="w-5/6 max-w-[480px] h-auto bg-white rounded">
+        <div class="flex flex-row-reverse justify-between px-3 text-white bg-[#5A8DEE] py-4">
+          <button @click="changeStatus = !changeStatus">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
+              viewBox="0 0 16 16">
+              <path
+                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <span class="text-lg">تغییر وضعیت تیکت به:</span>
+        </div>
+        <form class="w-full flex flex-col gap-2 py-2 px-3 bg-[#F4F4F4]">
+          <div class="">
+            <label for="id_label_single" class="text-xs md:text-sm text-[#0C2E71] flex flex-col gap-2">
+              <span class="text-right">وضعیت مورد نظر خود را انتخاب کنید</span>
+              <select class="select-tag text-xs md:text-sm w-full py-1 rounded text-right">
+                <option class="text-right">جدید</option>
+                <option class="text-right">پاسخ مشتری</option>
+                <option class="text-right">در حال پردازش</option>
+                <option class="text-right">پاسخ داده شده</option>
+                <option class="text-right">بسته شده</option>
+              </select>
+            </label>
+          </div>
+          <div class="flex flex-row-reverse gap-3">
+            <button class="w-20 h-8 rounded bg-[#5A8DEE] text-white">ثبت</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="bg-black transition-all duration-700 w-full h-full fixed top-0 rigt-0 !z-[1000]"
+      :class="{'opacity-50' : sidebarOpen, 'opacity-0 hidden' : !sidebarOpen}" @click="sidebarOpen = !sidebarOpen">
+    </div>
+    <div class="w-full h-full z-[1200] fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-50"
+      :class="{'flex' : newNote, 'hidden' : !newNote}">
+      <div class="w-5/6 max-w-[480px] h-auto bg-white rounded">
+        <div class="flex flex-row-reverse justify-between px-3 text-white bg-[#5A8DEE] py-4">
+          <button @click="newNote = !newNote">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
+              viewBox="0 0 16 16">
+              <path
+                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <span class="text-lg">ثبت یادداشت جدید</span>
+        </div>
+        <form class="w-full flex flex-col gap-2 py-2 px-3 bg-[#F4F4F4]">
+          <div class="self-start">
+            <span class="text-right text-[#666666]">متن یادداشت</span>
+          </div>
+          <div class="w-full h-auto shadow-lg">
+            <textarea name="" id="" cols="30" rows="7" class="w-full text-right"></textarea>
+          </div>
+          <div class="flex flex-row-reverse gap-3">
+            <button class="w-20 h-8 rounded bg-white text-[#5A8DEE]" @click="newNote = !newNote">لغو</button>
+            <button class="w-20 h-8 rounded bg-[#5A8DEE] text-white">ثبت</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="w-full h-full !z-[99999999] fixed top-0 left-0 flex justify-center items-center bg-black bg-opacity-50"
+      :class="{'flex' : editedMsg, 'hidden' : !editedMsg}">
+      <div
+        class="w-auto text-xs xs:w-5/6 xs:text-sm max-w-[485px] h-auto bg-white rounded flex flex-col p-5 !overflow-scroll">
+        <button class="self-end hover:text-[#5A8DEE]" @click="editedMsg = !editedMsg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
+            viewBox="0 0 16 16">
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+          </svg>
+        </button>
+        <div class="w-full flex flex-col">
+          <div class="flex gap-3">
+            <span>تاریخچه چت برای تیکت با عنوان : </span>
+            <span class="text-gray-500">طرح های figma</span>
+          </div>
+          <div class="flex gap-3">
+            <span>شناسه تیکت:</span>
+            <span class="text-gray-500">15648</span>
+          </div>
+          <div class="flex gap-3">
+            <span>کاربر:</span>
+            <span class="text-gray-500">اسم</span>
+          </div>
+          <div class="flex gap-3 items-center h-auto" x-data="{ more: false }">
+            <span class="self-start">متن چت قبلی:</span>
+            <span class="text-gray-500 truncate w-3/5" :class="{'' : more, 'truncate' : !more}">لورم ایپسوم متن ساختگی
+              با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله
+              در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع لورم ایپسوم متن
+              ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و
+              مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع.</span>
+            <button class="text-gray-500 hover:text-[#5A8DEE] transition-all duration-300 self-start mt-1"
+              @click="more = !more" :class="{'rotate-180' : more, 'rotate-0' : !more}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                <path
+                  d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+              </svg>
+            </button>
+          </div>
+          <div class="flex gap-3 items-center h-auto" x-data="{ more:false }">
+            <span class="self-start">متن چت جدید:</span>
+            <span class="text-gray-500 truncate w-3/5" :class="{'' : more, 'truncate' : !more}">لورم ایپسوم متن ساختگی
+              با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله
+              در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع.</span>
+            <button class="text-gray-500 hover:text-[#5A8DEE] transition-all duration-300 self-start mt-1"
+              @click="more = !more" :class="{'rotate-180' : more, 'rotate-0' : !more}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                <path
+                  d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+              </svg>
+            </button>
+          </div>
+          <div class="flex gap-3">
+            <span>تاریخ ایجاد:</span>
+            <span class="text-gray-500">15:21:01 1401/03/07</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="bg-black w-screen h-screen bg-opacity-50 flex justify-center items-center fixed top-0 left-0 !z-[99999999]"
+      :class="{'flex' : editMsg, 'hidden' : !editMsg}">
+      <div class="w-5/6 max-w-[480px] h-auto bg-white rounded">
+        <div class="flex flex-row-reverse justify-between px-3 text-white bg-[#5A8DEE] py-4">
+          <button @click="editMsg = !editMsg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
+              viewBox="0 0 16 16">
+              <path
+                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <span class="text-lg">ویرایش چت</span>
+        </div>
+        <form class="w-full flex flex-col gap-2 py-2 px-3 bg-[#F4F4F4]">
+          <div class="text-[#5A8DEE]">
+            متن جایگزین چت:
+          </div>
+          <div class="w-full h-auto">
+            <textarea name="" id="" cols="30" rows="10" class="w-full"></textarea>
+          </div>
+          <div class="flex flex-row-reverse gap-3">
+            <button class="w-20 h-8 rounded bg-[#5A8DEE] text-white">ثبت</button>
+            <button class="w-20 h-8 rounded bg-white text-[#5A8DEE]" @click="editMsg = !editMsg">لغو</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="bg-black w-screen h-screen bg-opacity-50 flex justify-center items-center fixed top-0 left-0 z-[1200]"
+      :class="{'flex' : editNote, 'hidden' : !editNote}">
+      <div class="w-5/6 max-w-[480px] h-auto bg-white rounded">
+        <div class="flex flex-row-reverse justify-between px-3 text-white bg-[#5A8DEE] py-4">
+          <button @click="editNote = !editNote">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
+              viewBox="0 0 16 16">
+              <path
+                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+          <span class="text-lg">ویرایش یادداشت</span>
+        </div>
+        <form class="w-full flex flex-col gap-2 py-2 px-3 bg-[#F4F4F4]">
+          <div class="text-[#5A8DEE]">
+            متن جایگزین یادداشت:
+          </div>
+          <div class="w-full h-auto">
+            <textarea name="" id="" cols="30" rows="10" class="w-full"></textarea>
+          </div>
+          <div class="flex flex-row-reverse gap-3">
+            <button class="w-20 h-8 rounded bg-[#5A8DEE] text-white">ثبت</button>
+            <button class="w-20 h-8 rounded bg-white text-[#5A8DEE]" @click="editNote = !editNote">لغو</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="w-screen h-full flex flex-col fixed top-0 left-0 !z-[99999999] bg-gray-200 overflow-auto"
+      :class="{'flex' : newTicket, 'hidden' : !newTicket}">
+      <div class="flex flex-row-reverse justify-between px-3 text-white py-4 bg-[#5A8DEE]">
+        <button @click="newTicket = !newTicket">
+          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x"
+            viewBox="0 0 16 16">
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+          </svg>
+        </button>
+        <span class="text-lg">ثبت تیکت جدید</span>
+      </div>
+      <form class="flex flex-col lg:flex-row mt-2 gap-2 text-sm">
+        <div class="w-full lg:w-1/2 flex flex-col gap-y-2 xs:flex-row">
+          <div class="w-full md:w-1/2  h-auto flex flex-col px-3 gap-2">
+            <label for="" class="text-[#5A8DEE]">عنوان</label>
+            <input type="text" name="" id="" class="h-[28px] rounded pr-2 shadow" />
+          </div>
+          <div class="w-full md:w-1/2  h-auto flex flex-col px-3">
+            <label for="id_label_single" class=" flex flex-col gap-2">
+              <span class="text-right text-[#5A8DEE]">کاربردهای متنوع</span>
+              <select class="select-tag w-full !h-10 py-1 text-right shadow">
+                <optgroup class="">
+                  <option class="text-right !text-sm">کاربردهای متنوع</option>
+                  <option class="text-right !text-sm">کاربردهای متنوع</option>
+                  <option class="text-right !text-sm">کاربردهای متنوع</option>
+                  <option class="text-right !text-sm">کاربردهای متنوع</option>
+                  <option class="text-right !text-sm">کاربردهای متنوع</option>
+                  <option class="text-right !text-sm">کاربردهای متنوع</option>
+                </optgroup>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div class="w-full lg:w-1/2 flex flex-col gap-y-2 xs:flex-row">
+          <div class="w-full md:w-1/2  h-auto flex flex-col px-3">
+            <label for="id_label_single" class=" flex flex-col gap-2">
+              <span class="text-right text-[#5A8DEE]">اولویت</span>
+              <select class="select-tag w-full !h-10 py-1 text-right shadow">
+                <optgroup class="">
+                  <option class="text-right !text-sm">کم</option>
+                  <option class="text-right !text-sm">متوسط</option>
+                  <option class="text-right !text-sm">زیاد</option>
+                </optgroup>
+              </select>
+            </label>
+          </div>
+          <div class="w-full md:w-1/2  h-auto flex flex-col px-3">
+            <label for="id_label_single" class=" flex flex-col gap-2">
+              <span class="text-right text-[#5A8DEE]">محصول</span>
+              <select class="select-tag w-full !h-10 py-1 text-right shadow">
+                <optgroup class="">
+                  <option class="text-right !text-sm">test</option>
+                  <option class="text-right !text-sm">test</option>
+                  <option class="text-right !text-sm">test</option>
+                </optgroup>
+              </select>
+            </label>
+          </div>
+        </div>
+      </form>
+      <form class="w-full flex flex-col gap-2 py-2 px-3 ">
+        <div class="text-[#5A8DEE]">
+          متن تیکت:
+        </div>
+        <div class="w-full h-auto">
+          <textarea name="" id="" cols="30" rows="10" class="w-full lg:min-h-[358px]"></textarea>
+        </div>
+        <div class="flex flex-row-reverse justify-between">
+          <div class="flex gap-3">
+            <button class="w-20 h-8 rounded bg-[#5A8DEE] text-white">ثبت</button>
+            <button class="w-20 h-8 rounded bg-white text-[#5A8DEE]" @click="newTicket = !newTicket">لغو</button>
+          </div>
+          <div class="relative">
+            <label class="cursor-pointer h-12 flex justify-center items-center self-end ticket-link-icon">
+              <input type="file" class="msg-text bg-transparent text-transparent hidden w-10" accept=".png,.pdf,.zip" />
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+                class="bi bi-link-45deg text-gray-500 hover:text-[#5A8DEE]" viewBox="0 0 16 16">
+                <path
+                  d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z" />
+                <path
+                  d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z" />
+              </svg>
+              <div
+                class="ticket-more-info w-44 h-auto bg-gray-900 text-gray-50 rounded p-3 hidden flex-col text-xs justify-center items-center z-[1200] absolute bottom-10 right-0">
+                <span class="">فرمت فایل: PNG, PDF, ZIP</span>
+                <span class="">حداکتثر حجم قابل اپلود: 128MB</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+  <script src="./all.js"></script>
+</body>
+
+</html>
